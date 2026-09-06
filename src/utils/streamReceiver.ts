@@ -13,11 +13,19 @@ export class StreamReceiver {
   private receiveBuffer: ArrayBuffer[] = [];
   private useFallback = false;
 
+  private channel: RTCDataChannel;
+  private onProgress: (bytes: number, speed: number, meta: FileMeta) => void;
+  private onComplete: (blobUrl?: string, meta?: FileMeta) => void;
+
   constructor(
-    private channel: RTCDataChannel,
-    private onProgress: (bytes: number, speed: number, meta: FileMeta) => void,
-    private onComplete: (blobUrl?: string, meta?: FileMeta) => void
-  ) {}
+    channel: RTCDataChannel,
+    onProgress: (bytes: number, speed: number, meta: FileMeta) => void,
+    onComplete: (blobUrl?: string, meta?: FileMeta) => void
+  ) {
+    this.channel = channel;
+    this.onProgress = onProgress;
+    this.onComplete = onComplete;
+  }
 
   public async handleMessage(data: string | ArrayBuffer, promptUserForSave: (meta: FileMeta) => Promise<any>) {
     if (typeof data === 'string') {

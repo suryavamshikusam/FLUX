@@ -1,8 +1,10 @@
-import React, { useEffect, useState, useRef, DragEvent } from 'react';
+import { useEffect, useState, useRef } from 'react';
+import type { DragEvent } from 'react';
 import Pusher, { PresenceChannel } from 'pusher-js';
-import { UploadCloud, CheckCircle, AlertCircle, Loader2, FileUp, Laptop, Smartphone, Radar } from 'lucide-react';
-import { startStreamSender, CHUNK_SIZE } from './utils/streamSender';
-import { StreamReceiver, FileMeta } from './utils/streamReceiver';
+import { CheckCircle, Loader2, FileUp, Laptop, Smartphone, Radar } from 'lucide-react';
+import { startStreamSender } from './utils/streamSender';
+import { StreamReceiver } from './utils/streamReceiver';
+import type { FileMeta } from './utils/streamReceiver';
 
 type TransferState = {
   isTransferring: boolean;
