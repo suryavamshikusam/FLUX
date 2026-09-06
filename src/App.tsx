@@ -13,6 +13,7 @@ type TransferState = {
   transferredBytes: number;
   totalBytes: number;
   direction: 'sending' | 'receiving';
+  status: string;
 };
 
 export default function App() {
@@ -100,7 +101,8 @@ export default function App() {
               speed,
               transferredBytes: bytes,
               totalBytes: meta.size,
-              direction: 'receiving'
+              direction: 'receiving',
+              status: 'Transferring...'
             });
           },
           (blobUrl, meta) => {
@@ -183,7 +185,8 @@ export default function App() {
       speed: 0,
       transferredBytes: 0,
       totalBytes: file.size,
-      direction: 'sending'
+      direction: 'sending',
+      status: 'Connecting WebRTC...'
     });
 
     const pc = new RTCPeerConnection({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] });
@@ -199,6 +202,8 @@ export default function App() {
     dc.binaryType = 'arraybuffer';
     
     dc.onopen = () => {
+      setTransferState(prev => prev ? { ...prev, status: 'Waiting for receiver to accept...' } : null);
+      
       startStreamSender(
         file,
         dc,
@@ -209,7 +214,8 @@ export default function App() {
             speed,
             transferredBytes: bytes,
             totalBytes: file.size,
-            direction: 'sending'
+            direction: 'sending',
+            status: 'Transferring...'
           });
         },
         () => {
@@ -345,7 +351,10 @@ export default function App() {
                   <h3 className="text-lg font-medium text-white">
                     {transferState.direction === 'sending' ? 'Sending...' : 'Receiving...'}
                   </h3>
-                  <p className="text-zinc-400 text-sm mt-1">
+                  <p className="text-blue-400 text-sm font-semibold mt-1">
+                    {transferState.status}
+                  </p>
+                  <p className="text-zinc-400 text-xs mt-1">
                     {formatBytes(transferState.transferredBytes)} of {formatBytes(transferState.totalBytes)}
                   </p>
                 </div>
