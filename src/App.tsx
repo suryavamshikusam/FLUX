@@ -176,6 +176,16 @@ export default function App() {
   const initiateTransfer = async (file: File) => {
     if (!selectedPeerId || !channel) return;
 
+    // Provide immediate visual feedback that transfer is starting
+    setTransferState({
+      isTransferring: false,
+      progress: 0,
+      speed: 0,
+      transferredBytes: 0,
+      totalBytes: file.size,
+      direction: 'sending'
+    });
+
     const pc = new RTCPeerConnection({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] });
     pcRef.current = pc;
 
