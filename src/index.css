@@ -10,3 +10,28 @@
 body {
   @apply bg-background text-gray-900 antialiased;
 }
+
+@layer utilities {
+  .radar-ring {
+    @apply absolute rounded-full border border-blue-500/30;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: radar-pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+}
+
+@keyframes radar-pulse {
+  0% {
+    width: 0px;
+    height: 0px;
+    opacity: 1;
+    border-width: 2px;
+  }
+  100% {
+    width: 800px;
+    height: 800px;
+    opacity: 0;
+    border-width: 1px;
+  }
+}
