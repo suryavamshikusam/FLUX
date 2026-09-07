@@ -147,8 +147,8 @@ export default function App() {
       iceQueueRef.current = [];
 
       const answer = await pc.createAnswer();
+      currentSocket.emit('signal', { targetId: fromId, payload: { sdp: answer } });
       await pc.setLocalDescription(answer);
-      currentSocket.emit('signal', { targetId: fromId, payload: { sdp: pc.localDescription } });
     } else if (pcRef.current) {
       if (signal.sdp && signal.sdp.type === 'answer') {
         await pcRef.current.setRemoteDescription(new RTCSessionDescription(signal.sdp));
@@ -215,8 +215,8 @@ export default function App() {
     };
 
     const offer = await pc.createOffer();
+    socket.emit('signal', { targetId: peerId, payload: { sdp: offer } });
     await pc.setLocalDescription(offer);
-    socket.emit('signal', { targetId: peerId, payload: { sdp: pc.localDescription } });
   };
 
   const onDrop = (e: DragEvent<HTMLDivElement>, peerId: string) => {
